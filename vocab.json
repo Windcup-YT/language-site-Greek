@@ -7,7 +7,7 @@
   { "word": "λέω", "translation": "say" },
   { "word": "μιλάω", "translation": "speak" },
   { "word": "μένω", "translation": "stay" },
-  { "word": "εγώ", "translation": "I" },
+  { "word": "εγώ", "translation": "I, you, he, she..." },
   { "word": "μαθαίνω", "translation": "learn" },
   { "word": "φοράω", "translation": "wear" },
   { "word": "αγαπώ", "translation": "love" },
@@ -28,5 +28,9 @@
   { "word": "πληρώνω", "translation": "pay" },
   { "word": "πηγαίνω", "translation": "go" },
   { "word": "αρέσω", "translation": "like" },
-  { "word": "τραγουδώ", "translation": "sing" }
+  { "word": "τραγουδώ", "translation": "sing" },
+  { "word": "χορεύω", "translation": "dance" },
+  { "word": "αγγίζω", "translation": "touch" },
+  { "word": "ξέρω", "translation": "know" },
+  { "word": "απαγορεύω", "translation": "prohibit" }
 ]
