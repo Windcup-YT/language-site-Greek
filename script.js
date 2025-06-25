@@ -77,3 +77,10 @@ function shuffle(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "el-GR";     // 希臘語（Greek - Greece）
+  utterance.rate = 0.9;         // 語速稍微慢一點
+  speechSynthesis.speak(utterance);
+}
