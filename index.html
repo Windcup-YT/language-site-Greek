@@ -11,6 +11,12 @@
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
       margin: 50px;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    body.light-mode {
+      background-color: #f9f9f9;
+      color: #222;
     }
 
     h1 {
@@ -38,45 +44,46 @@
       transition: background-color 0.3s;
     }
 
+    body.light-mode .menu-button {
+      background-color: #ddd;
+      color: #222;
+      border-color: #aaa;
+    }
+
     .menu-button:hover {
       background-color: #444;
     }
 
-    /* 新增語音區塊樣式 */
-    #voice-section {
-      margin-top: 50px;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
+    body.light-mode .menu-button:hover {
+      background-color: #bbb;
     }
 
-    #voice-section button {
-      margin: 8px;
-      padding: 10px 20px;
+    /* 黑白切換按鈕 */
+    #toggle-btn {
+      margin: 40px auto 0 auto;
+      padding: 12px 24px;
       font-size: 18px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
       background-color: #222;
       color: #fff;
       transition: background-color 0.3s;
+      display: block;
+      width: 200px;
     }
 
-    #voice-section button:hover:not(:disabled) {
+    #toggle-btn:hover {
       background-color: #555;
     }
 
-    #transcript {
-      margin-top: 15px;
-      color: #aaf;
-      white-space: pre-wrap;
-      min-height: 60px;
-      font-size: 18px;
-      border: 1px solid #555;
-      border-radius: 8px;
-      padding: 10px;
-      background-color: #111;
+    body.light-mode #toggle-btn {
+      background-color: #ddd;
+      color: #222;
+    }
+
+    body.light-mode #toggle-btn:hover {
+      background-color: #bbb;
     }
   </style>
 </head>
@@ -88,78 +95,18 @@
     <a href="quiz.html" class="menu-button">🎯 Quiz</a>
   </div>
 
-  <!-- 新增語音偵測區塊 -->
-  <div id="voice-section">
-    <button id="start-btn">開始語音偵測</button>
-    <button id="stop-btn" disabled>停止偵測</button>
-    <div id="transcript">偵測結果會顯示在這裡</div>
-    <button id="play-btn" disabled>播放語音</button>
-  </div>
+  <button id="toggle-btn">切換到亮色模式</button>
 
   <script>
-    const startBtn = document.getElementById('start-btn');
-    const stopBtn = document.getElementById('stop-btn');
-    const playBtn = document.getElementById('play-btn');
-    const transcriptDiv = document.getElementById('transcript');
-
-    let recognition;
-    let finalTranscript = '';
-
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert('抱歉，您的瀏覽器不支援語音偵測功能，請使用 Chrome。');
-    } else {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
-
-      recognition.lang = 'el-GR';  // 偵測語言：希臘語
-      recognition.interimResults = true;
-      recognition.continuous = true;
-
-      recognition.onresult = (event) => {
-        let interimTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript + ' ';
-          } else {
-            interimTranscript += transcript;
-          }
-        }
-        transcriptDiv.textContent = '確定: ' + finalTranscript + '\n即時: ' + interimTranscript;
-        playBtn.disabled = finalTranscript.trim() === '';
-      };
-
-      recognition.onerror = (event) => {
-        console.error('語音偵測錯誤:', event.error);
-      };
-
-      recognition.onend = () => {
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-      };
-    }
-
-    startBtn.onclick = () => {
-      finalTranscript = '';
-      transcriptDiv.textContent = '';
-      recognition.start();
-      startBtn.disabled = true;
-      stopBtn.disabled = false;
-      playBtn.disabled = true;
-    };
-
-    stopBtn.onclick = () => {
-      recognition.stop();
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-    };
-
-    playBtn.onclick = () => {
-      if (!finalTranscript) return;
-      const utterance = new SpeechSynthesisUtterance(finalTranscript);
-      utterance.lang = 'el-GR';
-      speechSynthesis.speak(utterance);
-    };
+    const toggleBtn = document.getElementById('toggle-btn');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      if (document.body.classList.contains('light-mode')) {
+        toggleBtn.textContent = '切換回深色模式';
+      } else {
+        toggleBtn.textContent = '切換到亮色模式';
+      }
+    });
   </script>
 </body>
 </html>
