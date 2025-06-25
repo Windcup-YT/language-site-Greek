@@ -1,5 +1,5 @@
 [
-  { "word": "είμαι", "translation": "am/are/is" },
+  { "word": "είμαι", "translation": "am" },
   { "word": "πίνω", "translation": "drink" },
   { "word": "τρωώ", "translation": "eat" },
   { "word": "έχω", "translation": "have" },
@@ -7,7 +7,7 @@
   { "word": "λέω", "translation": "say" },
   { "word": "μιλάω", "translation": "speak" },
   { "word": "μένω", "translation": "stay" },
-  { "word": "εγώ", "translation": "I, you, he, she..." },
+  { "word": "εγώ", "translation": "I" },
   { "word": "μαθαίνω", "translation": "learn" },
   { "word": "φοράω", "translation": "wear" },
   { "word": "αγαπώ", "translation": "love" },
