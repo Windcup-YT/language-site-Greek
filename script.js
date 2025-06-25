@@ -3,7 +3,7 @@ let questionPool = [];
 let currentIndex = 0;
 let currentQuestion = null;
 
-fetch("data/vocab.json")
+fetch("vocab.json")
   .then(res => {
     if (!res.ok) throw new Error("Failed to load.");
     return res.json();
@@ -27,7 +27,6 @@ function resetQuestionPool() {
 function nextQuestion() {
   document.getElementById("feedback").textContent = "";
 
-  // 題目出完就重新洗一輪
   if (currentIndex >= questionPool.length) {
     alert("You've finished all the questions! Starting again.");
     resetQuestionPool();
@@ -36,7 +35,6 @@ function nextQuestion() {
   currentQuestion = questionPool[currentIndex];
   currentIndex++;
 
-  // 建立選項
   const options = [currentQuestion.translation];
   while (options.length < 4) {
     const random = vocab[Math.floor(Math.random() * vocab.length)].translation;
@@ -68,8 +66,11 @@ function checkAnswer(selected) {
     feedback.textContent = `Oops! The correct answer is: ${currentQuestion.translation}`;
     feedback.style.color = "red";
   }
-}
 
+  setTimeout(() => {
+    nextQuestion();
+  }, 1500);
+}
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -79,8 +80,9 @@ function shuffle(array) {
 }
 
 function speak(text) {
+  speechSynthesis.cancel(); // 取消之前語音
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "el-GR";     // 希臘語（Greek - Greece）
-  utterance.rate = 0.9;         // 語速稍微慢一點
+  utterance.lang = "el-GR";
+  utterance.rate = 0.9;
   speechSynthesis.speak(utterance);
 }
