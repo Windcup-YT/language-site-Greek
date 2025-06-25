@@ -58,6 +58,8 @@ function nextQuestion() {
 }
 
 function checkAnswer(selected) {
+  speak(currentQuestion.word); // 點選就唸出希臘文單字
+
   const feedback = document.getElementById("feedback");
   if (selected === currentQuestion.translation) {
     feedback.textContent = "Correct! 🎉";
@@ -67,6 +69,7 @@ function checkAnswer(selected) {
     feedback.style.color = "red";
   }
 }
+
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
