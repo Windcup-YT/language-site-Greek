@@ -1,4 +1,80 @@
-function checkAnswer(selected) {
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Greek Vocabulary Quiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🎯 Greek Vocabulary Quiz</h1>
+  <div id="quiz-box">
+    <p id="question">Loading...</p>
+    <div id="options"></div>
+    <p id="feedback"></p>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+  <br>
+  <a href="index.html">← Back to Lobby</a>
+
+  <script>
+    let vocab = [];
+    let questionPool = [];
+    let currentIndex = 0;
+    let currentQuestion = null;
+
+    fetch("vocab.json")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load.");
+        return res.json();
+      })
+      .then(data => {
+        vocab = data;
+        resetQuestionPool();
+        nextQuestion();
+      })
+      .catch(err => {
+        document.getElementById("question").textContent = "Failed to load 🥲";
+        console.error("Error:", err);
+      });
+
+    function resetQuestionPool() {
+      questionPool = [...vocab];
+      shuffle(questionPool);
+      currentIndex = 0;
+    }
+
+    function nextQuestion() {
+      document.getElementById("feedback").textContent = "";
+
+      if (currentIndex >= questionPool.length) {
+        alert("You've finished all questions! Restarting.");
+        resetQuestionPool();
+      }
+
+      currentQuestion = questionPool[currentIndex];
+      currentIndex++;
+
+      const options = [currentQuestion.translation];
+      while (options.length < 5) {
+        const random = vocab[Math.floor(Math.random() * vocab.length)].translation;
+        if (!options.includes(random)) options.push(random);
+      }
+
+      shuffle(options);
+
+      document.getElementById("question").textContent = `What does “${currentQuestion.word}” mean?`;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
   speak(currentQuestion.word); // 讓語音讀出希臘文單字
 
   const feedback = document.getElementById("feedback");
@@ -22,3 +98,14 @@ function speak(text) {
   utterance.rate = 0.9;
   speechSynthesis.speak(utterance);
 }
+
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+  </script>
+</body>
+</html>
