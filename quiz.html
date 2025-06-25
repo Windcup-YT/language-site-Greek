@@ -4,20 +4,72 @@
   <meta charset="UTF-8">
   <title>Greek Vocabulary Quiz</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    #progress-container {
+      width: 80%;
+      height: 20px;
+      background: #333;
+      border-radius: 10px;
+      margin: 20px auto;
+      position: relative;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #6a9;
+      border-radius: 10px;
+      transition: width 0.3s;
+    }
+
+    #progress-text {
+      text-align: center;
+      color: #ccc;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+
+    button {
+      margin: 8px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background-color: #222;
+      color: #fff;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #444;
+    }
+
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+  </style>
 </head>
 <body>
-
-  <div id="progress-container" style="width: 80%; height: 20px; background: #333; border-radius: 10px; margin: 20px auto;">
-  <div id="progress-bar" style="height: 100%; width: 0%; background: #6a9; border-radius: 10px; transition: width 0.3s;"></div>
-</div>
-
   <h1>🎯 Greek Vocabulary Quiz</h1>
+
+  <!-- ✅ 進度條 -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  <div id="progress-text">Progress: 0 / 0</div>
+
   <div id="quiz-box">
     <p id="question">Loading...</p>
     <div id="options"></div>
     <p id="feedback"></p>
     <button onclick="nextQuestion()">Next</button>
   </div>
+
   <br>
   <a href="index.html">← Back to Lobby</a>
 
@@ -46,6 +98,7 @@
       questionPool = [...vocab];
       shuffle(questionPool);
       currentIndex = 0;
+      updateProgress(); // 重設進度條
     }
 
     function nextQuestion() {
@@ -77,33 +130,43 @@
         btn.onclick = () => checkAnswer(option);
         optionsDiv.appendChild(btn);
       });
+
+      updateProgress();
     }
 
     function checkAnswer(selected) {
-  speak(currentQuestion.word); // 讓語音讀出希臘文單字
+      speak(currentQuestion.word);
 
-  const feedback = document.getElementById("feedback");
-  if (selected === currentQuestion.translation) {
-    feedback.textContent = "Correct! 🎉";
-    feedback.style.color = "lightgreen";
-  } else {
-    feedback.textContent = `Oops! The correct answer is: ${currentQuestion.translation}`;
-    feedback.style.color = "red";
-  }
+      const feedback = document.getElementById("feedback");
+      if (selected === currentQuestion.translation) {
+        feedback.textContent = "Correct! 🎉";
+        feedback.style.color = "lightgreen";
+      } else {
+        feedback.textContent = `Oops! The correct answer is: ${currentQuestion.translation}`;
+        feedback.style.color = "red";
+      }
 
-  setTimeout(() => {
-    nextQuestion();
-  }, 1500);
-}
+      setTimeout(() => {
+        nextQuestion();
+      }, 1500);
+    }
 
-function speak(text) {
-  speechSynthesis.cancel(); // 先停止其他語音，避免疊音
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "el-GR"; // 希臘語
-  utterance.rate = 0.9;
-  speechSynthesis.speak(utterance);
-}
+    function speak(text) {
+      speechSynthesis.cancel(); // 避免重疊
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "el-GR";
+      utterance.rate = 0.9;
+      speechSynthesis.speak(utterance);
+    }
 
+    function updateProgress() {
+      const bar = document.getElementById("progress-bar");
+      const text = document.getElementById("progress-text");
+
+      const percent = (currentIndex / questionPool.length) * 100;
+      bar.style.width = percent + "%";
+      text.textContent = `Progress: ${currentIndex} / ${questionPool.length}`;
+    }
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
