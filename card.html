@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Flashcard</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    .card-container {
+      perspective: 1000px;
+      width: 300px;
+      height: 180px;
+      margin: 30px auto;
+      cursor: pointer;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #444;
+      background-color: #111;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 36px;
+      user-select: none;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card .front,
+    .card .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+    }
+
+    .card .back {
+      transform: rotateY(180deg);
+      background-color: #222;
+      color: #aaf;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: #88f;
+      font-size: 16px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="flashcards.html">← Back</a>
+  <div class="card-container" id="card-container">
+    <div class="card" id="card">
+      <div class="front" id="front-text">...</div>
+      <div class="back" id="back-text">...</div>
+    </div>
+  </div>
+
+  <script>
+    let vocab = [];
+    const params = new URLSearchParams(location.search);
+    const index = parseInt(params.get("index"));
+
+    fetch("vocab.json")
+      .then(res => res.json())
+      .then(data => {
+        vocab = data;
+        if (index >= 0 && index < vocab.length) {
+          document.getElementById("front-text").textContent = vocab[index].word;
+          document.getElementById("back-text").textContent = vocab[index].translation;
+        } else {
+          document.getElementById("front-text").textContent = "Invalid index 😢";
+        }
+      });
+
+    const card = document.getElementById("card");
+    card.addEventListener("click", () => {
+      card.classList.toggle("flipped");
+    });
+  </script>
+</body>
+</html>
