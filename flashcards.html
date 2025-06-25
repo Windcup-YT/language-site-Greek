@@ -2,8 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Flashcards List</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Word List</title>
   <style>
     body {
       background-color: #111;
@@ -47,13 +46,6 @@
       background-color: #333;
     }
 
-    .translation {
-      margin-top: 5px;
-      font-size: 15px;
-      color: #aaf;
-      display: none;
-    }
-
     a {
       color: #88f;
       display: block;
@@ -72,32 +64,24 @@
     let vocab = [];
 
     fetch("vocab.json")
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load.");
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => {
         vocab = data;
-        displayWords(vocab);
+        displayWords(data);
       })
-      .catch(err => {
+      .catch(() => {
         document.getElementById("word-list").textContent = "Failed to load 🥲";
-        console.error(err);
       });
 
     function displayWords(list) {
       const container = document.getElementById("word-list");
       container.innerHTML = "";
-      list.forEach(entry => {
+      list.forEach((entry, index) => {
         const item = document.createElement("div");
         item.className = "word-item";
-        item.innerHTML = `
-          <div class="greek">${entry.word}</div>
-          <div class="translation">${entry.translation}</div>
-        `;
+        item.textContent = entry.word + " - " + entry.translation;
         item.addEventListener("click", () => {
-          const t = item.querySelector(".translation");
-          t.style.display = t.style.display === "none" ? "block" : "none";
+          window.location.href = `card.html?index=${index}`;
         });
         container.appendChild(item);
       });
