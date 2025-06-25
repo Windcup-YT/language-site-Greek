@@ -11,12 +11,6 @@
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
       margin: 50px;
-      transition: background-color 0.5s, color 0.5s;
-    }
-
-    body.light-mode {
-      background-color: #f9f9f9;
-      color: #222;
     }
 
     h1 {
@@ -44,46 +38,45 @@
       transition: background-color 0.3s;
     }
 
-    body.light-mode .menu-button {
-      background-color: #ddd;
-      color: #222;
-      border-color: #aaa;
-    }
-
     .menu-button:hover {
       background-color: #444;
     }
 
-    body.light-mode .menu-button:hover {
-      background-color: #bbb;
+    /* 新增語音區塊樣式 */
+    #voice-section {
+      margin-top: 50px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
     }
 
-    /* 黑白切換按鈕 */
-    #toggle-btn {
-      margin: 40px auto 0 auto;
-      padding: 12px 24px;
+    #voice-section button {
+      margin: 8px;
+      padding: 10px 20px;
       font-size: 18px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
       background-color: #222;
       color: #fff;
       transition: background-color 0.3s;
-      display: block;
-      width: 200px;
     }
 
-    #toggle-btn:hover {
+    #voice-section button:hover:not(:disabled) {
       background-color: #555;
     }
 
-    body.light-mode #toggle-btn {
-      background-color: #ddd;
-      color: #222;
-    }
-
-    body.light-mode #toggle-btn:hover {
-      background-color: #bbb;
+    #transcript {
+      margin-top: 15px;
+      color: #aaf;
+      white-space: pre-wrap;
+      min-height: 60px;
+      font-size: 18px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #111;
     }
   </style>
 </head>
@@ -94,19 +87,5 @@
     <a href="translator.html" class="menu-button">🔍 Translator</a>
     <a href="quiz.html" class="menu-button">🎯 Quiz</a>
   </div>
-
-  <button id="toggle-btn">切換到亮色模式</button>
-
-  <script>
-    const toggleBtn = document.getElementById('toggle-btn');
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      if (document.body.classList.contains('light-mode')) {
-        toggleBtn.textContent = '切換回深色模式';
-      } else {
-        toggleBtn.textContent = '切換到亮色模式';
-      }
-    });
-  </script>
 </body>
 </html>
