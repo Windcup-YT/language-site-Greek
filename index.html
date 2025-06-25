@@ -41,6 +41,43 @@
     .menu-button:hover {
       background-color: #444;
     }
+
+    /* 新增語音區塊樣式 */
+    #voice-section {
+      margin-top: 50px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    #voice-section button {
+      margin: 8px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background-color: #222;
+      color: #fff;
+      transition: background-color 0.3s;
+    }
+
+    #voice-section button:hover:not(:disabled) {
+      background-color: #555;
+    }
+
+    #transcript {
+      margin-top: 15px;
+      color: #aaf;
+      white-space: pre-wrap;
+      min-height: 60px;
+      font-size: 18px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #111;
+    }
   </style>
 </head>
 <body>
@@ -50,5 +87,79 @@
     <a href="translator.html" class="menu-button">🔍 Translator</a>
     <a href="quiz.html" class="menu-button">🎯 Quiz</a>
   </div>
+
+  <!-- 新增語音偵測區塊 -->
+  <div id="voice-section">
+    <button id="start-btn">開始語音偵測</button>
+    <button id="stop-btn" disabled>停止偵測</button>
+    <div id="transcript">偵測結果會顯示在這裡</div>
+    <button id="play-btn" disabled>播放語音</button>
+  </div>
+
+  <script>
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const playBtn = document.getElementById('play-btn');
+    const transcriptDiv = document.getElementById('transcript');
+
+    let recognition;
+    let finalTranscript = '';
+
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('抱歉，您的瀏覽器不支援語音偵測功能，請使用 Chrome。');
+    } else {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+
+      recognition.lang = 'el-GR';  // 偵測語言：希臘語
+      recognition.interimResults = true;
+      recognition.continuous = true;
+
+      recognition.onresult = (event) => {
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript + ' ';
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+        transcriptDiv.textContent = '確定: ' + finalTranscript + '\n即時: ' + interimTranscript;
+        playBtn.disabled = finalTranscript.trim() === '';
+      };
+
+      recognition.onerror = (event) => {
+        console.error('語音偵測錯誤:', event.error);
+      };
+
+      recognition.onend = () => {
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      };
+    }
+
+    startBtn.onclick = () => {
+      finalTranscript = '';
+      transcriptDiv.textContent = '';
+      recognition.start();
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      playBtn.disabled = true;
+    };
+
+    stopBtn.onclick = () => {
+      recognition.stop();
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    };
+
+    playBtn.onclick = () => {
+      if (!finalTranscript) return;
+      const utterance = new SpeechSynthesisUtterance(finalTranscript);
+      utterance.lang = 'el-GR';
+      speechSynthesis.speak(utterance);
+    };
+  </script>
 </body>
 </html>
