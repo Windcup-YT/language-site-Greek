@@ -2,125 +2,74 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Flashcards</title>
+  <title>Flashcards List</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
       background-color: #111;
       color: white;
       font-family: sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
       text-align: center;
     }
 
-    .card-container {
-      perspective: 1000px;
-      width: 300px;
-      height: 180px;
-      margin: 30px auto;
-      cursor: pointer;
-    }
-
-    .card {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s;
-      border-radius: 15px;
-      box-shadow: 0 0 15px #444;
-      background-color: #111;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 36px;
-      user-select: none;
-    }
-
-    .card.flipped {
-      transform: rotateY(180deg);
-    }
-
-    .card .front,
-    .card .back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 15px;
-    }
-
-    .card .back {
-      transform: rotateY(180deg);
-      background-color: #222;
-      color: #aaf;
-    }
-
-    .controls {
-      margin: 20px;
-    }
-
-    .controls button {
-      margin: 0 10px;
-      padding: 8px 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background-color: #333;
-      color: white;
-      cursor: pointer;
-    }
-
-    .controls button:hover {
-      background-color: #555;
-    }
-
     input[type="text"] {
-      padding: 8px;
-      width: 240px;
+      display: block;
+      margin: 0 auto 20px;
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
       font-size: 16px;
       border-radius: 8px;
       border: none;
-      margin-top: 10px;
       background-color: #222;
       color: white;
+    }
+
+    .word-list {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .word-item {
+      background-color: #222;
+      margin: 10px 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .word-item:hover {
+      background-color: #333;
+    }
+
+    .translation {
+      margin-top: 5px;
+      font-size: 15px;
+      color: #aaf;
+      display: none;
     }
 
     a {
       color: #88f;
+      display: block;
+      text-align: center;
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
-  <h1>🃏 Flashcards</h1>
-
+  <h1>📚 Vocabulary List</h1>
   <input type="text" id="search" placeholder="Search Greek or English...">
-
-  <div class="card-container" id="card-container">
-    <div class="card" id="card">
-      <div class="front" id="front-text">Loading...</div>
-      <div class="back" id="back-text"></div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button id="prev-btn">← Previous</button>
-    <button id="next-btn">Next →</button>
-  </div>
-
+  <div class="word-list" id="word-list">Loading...</div>
   <a href="index.html">← Back to Lobby</a>
 
   <script>
     let vocab = [];
-    let filteredVocab = [];
-    let currentIndex = 0;
-
-    const card = document.getElementById("card");
-    const frontText = document.getElementById("front-text");
-    const backText = document.getElementById("back-text");
 
     fetch("vocab.json")
       .then(res => {
@@ -129,52 +78,38 @@
       })
       .then(data => {
         vocab = data;
-        filteredVocab = vocab;
-        showCard();
+        displayWords(vocab);
       })
       .catch(err => {
-        frontText.textContent = "Failed to load 🥲";
+        document.getElementById("word-list").textContent = "Failed to load 🥲";
         console.error(err);
       });
 
-    function showCard() {
-      card.classList.remove("flipped");
-      if (filteredVocab.length === 0) {
-        frontText.textContent = "No match 😢";
-        backText.textContent = "";
-        return;
-      }
-      const entry = filteredVocab[currentIndex];
-      frontText.textContent = entry.word;
-      backText.textContent = entry.translation;
+    function displayWords(list) {
+      const container = document.getElementById("word-list");
+      container.innerHTML = "";
+      list.forEach(entry => {
+        const item = document.createElement("div");
+        item.className = "word-item";
+        item.innerHTML = `
+          <div class="greek">${entry.word}</div>
+          <div class="translation">${entry.translation}</div>
+        `;
+        item.addEventListener("click", () => {
+          const t = item.querySelector(".translation");
+          t.style.display = t.style.display === "none" ? "block" : "none";
+        });
+        container.appendChild(item);
+      });
     }
-
-    document.getElementById("next-btn").addEventListener("click", () => {
-      if (filteredVocab.length > 0) {
-        currentIndex = (currentIndex + 1) % filteredVocab.length;
-        showCard();
-      }
-    });
-
-    document.getElementById("prev-btn").addEventListener("click", () => {
-      if (filteredVocab.length > 0) {
-        currentIndex = (currentIndex - 1 + filteredVocab.length) % filteredVocab.length;
-        showCard();
-      }
-    });
 
     document.getElementById("search").addEventListener("input", (e) => {
       const query = e.target.value.toLowerCase();
-      filteredVocab = vocab.filter(entry =>
+      const filtered = vocab.filter(entry =>
         entry.word.toLowerCase().includes(query) ||
         entry.translation.toLowerCase().includes(query)
       );
-      currentIndex = 0;
-      showCard();
-    });
-
-    card.addEventListener("click", () => {
-      card.classList.toggle("flipped");
+      displayWords(filtered);
     });
   </script>
 </body>
