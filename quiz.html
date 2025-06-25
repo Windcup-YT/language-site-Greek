@@ -1,33 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <meta charset="UTF-8">
   <title>Greek Vocabulary Quiz</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <link rel="stylesheet" href="style.css">
   <style>
-    #progress-container {
-      width: 80%;
-      height: 20px;
-      background: #333;
-      border-radius: 10px;
-      margin: 20px auto;
-      position: relative;
-    }
-
-    #progress-bar {
-      height: 100%;
-      width: 0%;
-      background: #6a9;
-      border-radius: 10px;
-      transition: width 0.3s;
-    }
-
-    #progress-text {
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      color: #ccc;
-      font-size: 16px;
-      margin-top: 5px;
+      padding: 30px;
     }
 
     button {
@@ -46,19 +30,39 @@
       background-color: #444;
     }
 
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+    #progress-container {
+      width: 80%;
+      height: 20px;
+      background: #333;
+      border-radius: 10px;
+      margin: 20px auto;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #6a9;
+      border-radius: 10px;
+      transition: width 0.3s;
+    }
+
+    #progress-text {
       text-align: center;
-      padding: 30px;
+      color: #ccc;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+
+    #options button {
+      display: block;
+      width: 60%;
+      margin: 10px auto;
     }
   </style>
 </head>
 <body>
   <h1>🎯 Greek Vocabulary Quiz</h1>
 
-  <!-- ✅ 進度條 -->
   <div id="progress-container">
     <div id="progress-bar"></div>
   </div>
@@ -68,7 +72,6 @@
     <p id="question">Loading...</p>
     <div id="options"></div>
     <p id="feedback"></p>
-    <button onclick="nextQuestion()">Next</button>
   </div>
 
   <br>
@@ -79,6 +82,7 @@
     let questionPool = [];
     let currentIndex = 0;
     let currentQuestion = null;
+    let isWaiting = false;
 
     fetch("vocab.json")
       .then(res => {
@@ -99,10 +103,12 @@
       questionPool = [...vocab];
       shuffle(questionPool);
       currentIndex = 0;
-      updateProgress(); // 重設進度條
+      updateProgress();
     }
 
     function nextQuestion() {
+      if (isWaiting) return;
+
       document.getElementById("feedback").textContent = "";
 
       if (currentIndex >= questionPool.length) {
@@ -136,6 +142,9 @@
     }
 
     function checkAnswer(selected) {
+      if (isWaiting) return;
+      isWaiting = true;
+
       speak(currentQuestion.word);
 
       const feedback = document.getElementById("feedback");
@@ -148,12 +157,13 @@
       }
 
       setTimeout(() => {
+        isWaiting = false;
         nextQuestion();
       }, 1500);
     }
 
     function speak(text) {
-      speechSynthesis.cancel(); // 避免重疊
+      speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "el-GR";
       utterance.rate = 0.9;
