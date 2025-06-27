@@ -1,115 +1,153 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flashcards</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flashcards List</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <style>
-    /* 卡片容器 */
-    .card-container {
-      perspective: 1000px;
-      width: 300px;
-      height: 180px;
-      margin: 50px auto;
-      cursor: pointer;
-    }
-
-    /* 卡片本體 */
-    .card {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s;
-      border-radius: 15px;
-      box-shadow: 0 0 15px #444;
+    body {
       background-color: #111;
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 36px;
-      user-select: none;
+      font-family: sans-serif;
+      padding: 20px;
+      margin: 0;
     }
 
-    /* 翻轉時卡片旋轉180度 */
-    .card.flipped {
-      transform: rotateY(180deg);
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
     }
 
-    /* 卡片正面和背面 */
-    .card .front,
-    .card .back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 15px;
-    }
-
-    .card .back {
-      transform: rotateY(180deg);
+    #search {
+      display: block;
+      margin: 0 auto 20px;
+      padding: 10px;
+      width: 90%;
+      max-width: 400px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
       background-color: #222;
-      color: #aaf;
+      color: white;
+      box-sizing: border-box;
+    }
+
+    .word-list {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 10px;
+    }
+
+    .word-item {
+      background-color: #222;
+      margin: 6px 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      box-sizing: border-box;
+      font-size: 1rem;
+      text-align: left;
+    }
+
+    .word-item:hover {
+      background-color: #333;
+    }
+
+    a.back-link {
+      color: #88f;
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 15px 10px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      #search {
+        width: 95%;
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+
+      .word-item {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+      }
+
+      a.back-link {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🃏 Flashcards</h1>
-  <div class="card-container" id="card-container">
-    <div class="card" id="card">
-      <div class="front" id="front-text">Loading...</div>
-      <div class="back" id="back-text"></div>
-    </div>
+  <h1>🧠 Greek Flashcards</h1>
+  <input type="text" id="search" placeholder="Search words..." autocomplete="off" />
+
+  <div class="word-list" id="word-list">
+    Loading...
   </div>
-  <button id="next-btn">Next Card</button>
-  <br><br>
-  <a href="index.html">← Back to Lobby</a>
+
+  <a href="index.html" class="back-link">🏠 Back to Lobby</a>
 
   <script>
     let vocab = [];
-    let currentIndex = 0;
-    const card = document.getElementById("card");
-    const frontText = document.getElementById("front-text");
-    const backText = document.getElementById("back-text");
+    const wordList = document.getElementById("word-list");
+    const searchInput = document.getElementById("search");
 
-    // 載入單字表
-    fetch("data/vocab.json")
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load.");
-        return res.json();
-      })
+    // 載入詞彙
+    fetch("vocab.json")
+      .then(res => res.json())
       .then(data => {
         vocab = data;
-        showCard();
+        renderList(vocab);
       })
-      .catch(err => {
-        frontText.textContent = "Failed to load 🥲";
-        console.error(err);
+      .catch(() => {
+        wordList.textContent = "Failed to load vocab.json 😢";
       });
 
-    // 顯示卡片
-    function showCard() {
-      card.classList.remove("flipped");
-      const entry = vocab[currentIndex];
-      frontText.textContent = entry.word;       // 希臘文
-      backText.textContent = entry.translation; // 英文翻譯
+    // 渲染清單
+    function renderList(list) {
+      if (list.length === 0) {
+        wordList.innerHTML = "<p>No matching words found.</p>";
+        return;
+      }
+
+      wordList.innerHTML = "";
+      list.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.className = "word-item";
+        div.textContent = `${item.word} — ${item.translation}`;
+        div.onclick = () => {
+          window.location.href = `card.html?index=${vocab.indexOf(item)}`;
+        };
+        wordList.appendChild(div);
+      });
     }
 
-    // 下一張卡片
-    document.getElementById("next-btn").addEventListener("click", () => {
-      currentIndex = (currentIndex + 1) % vocab.length;
-      showCard();
-    });
-
-    // 點卡片翻轉
-    card.addEventListener("click", () => {
-      card.classList.toggle("flipped");
+    // 搜尋事件
+    searchInput.addEventListener("input", () => {
+      const val = searchInput.value.trim().toLowerCase();
+      if (!val) {
+        renderList(vocab);
+        return;
+      }
+      const filtered = vocab.filter(item =>
+        item.word.toLowerCase().includes(val) ||
+        item.translation.toLowerCase().includes(val)
+      );
+      renderList(filtered);
     });
   </script>
 </body>
