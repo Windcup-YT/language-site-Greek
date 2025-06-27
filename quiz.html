@@ -146,6 +146,19 @@
       currentIndex++;
 
       const options = [currentQuestion.translation];
+
+      // 找出同分類（category）中的其他單字
+      const sameCategory = vocab.filter(entry =>
+        entry.category === currentQuestion.category &&
+        entry.translation !== currentQuestion.translation
+      );
+
+      while (options.length < 5 && sameCategory.length > 0) {
+        const choice = sameCategory.splice(Math.floor(Math.random() * sameCategory.length), 1)[0];
+        if (!options.includes(choice.translation)) options.push(choice.translation);
+      }
+
+      // 不夠就從整體中隨機補足
       while (options.length < 5) {
         const random = vocab[Math.floor(Math.random() * vocab.length)].translation;
         if (!options.includes(random)) options.push(random);
