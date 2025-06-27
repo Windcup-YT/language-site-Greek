@@ -4,88 +4,113 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Word List</title>
+  <title>Flashcards</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body {
+    /* 卡片容器 */
+    .card-container {
+      perspective: 1000px;
+      width: 300px;
+      height: 180px;
+      margin: 50px auto;
+      cursor: pointer;
+    }
+
+    /* 卡片本體 */
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #444;
       background-color: #111;
       color: white;
-      font-family: sans-serif;
-      padding: 20px;
-      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 36px;
+      user-select: none;
     }
-  
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
+
+    /* 翻轉時卡片旋轉180度 */
+    .card.flipped {
+      transform: rotateY(180deg);
     }
-  
-    input[type="text"] {
-      display: block;
-      margin: 0 auto 20px;
-      padding: 10px;
-      width: 90%;
-      max-width: 400px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: none;
-      background-color: #222;
-      color: white;
-      box-sizing: border-box;
-    }
-  
-    .word-list {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 0 10px;
-    }
-  
-    .word-item {
-      background-color: #222;
-      margin: 8px 0;
-      padding: 12px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.2s;
+
+    /* 卡片正面和背面 */
+    .card .front,
+    .card .back {
+      position: absolute;
       width: 100%;
-      box-sizing: border-box;
-      font-size: 1rem;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
     }
-  
-    .word-item:hover {
-      background-color: #333;
-    }
-  
-    a {
-      color: #88f;
-      display: block;
-      text-align: center;
-      margin-top: 30px;
-      font-size: 1rem;
-    }
-  
-    /* 手機專用微調 */
-    @media (max-width: 480px) {
-      body {
-        padding: 15px 10px;
-      }
-  
-      h1 {
-        font-size: 1.5rem;
-      }
-  
-      input[type="text"] {
-        width: 95%;
-        font-size: 0.9rem;
-        padding: 8px;
-      }
-  
-      .word-item {
-        font-size: 0.9rem;
-        padding: 10px 12px;
-      }
-  
-      a {
-        font-size: 0.9rem;
-      }
+
+    .card .back {
+      transform: rotateY(180deg);
+      background-color: #222;
+      color: #aaf;
     }
   </style>
+</head>
+<body>
+  <h1>🃏 Flashcards</h1>
+  <div class="card-container" id="card-container">
+    <div class="card" id="card">
+      <div class="front" id="front-text">Loading...</div>
+      <div class="back" id="back-text"></div>
+    </div>
+  </div>
+  <button id="next-btn">Next Card</button>
+  <br><br>
+  <a href="index.html">← Back to Lobby</a>
+
+  <script>
+    let vocab = [];
+    let currentIndex = 0;
+    const card = document.getElementById("card");
+    const frontText = document.getElementById("front-text");
+    const backText = document.getElementById("back-text");
+
+    // 載入單字表
+    fetch("data/vocab.json")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load.");
+        return res.json();
+      })
+      .then(data => {
+        vocab = data;
+        showCard();
+      })
+      .catch(err => {
+        frontText.textContent = "Failed to load 🥲";
+        console.error(err);
+      });
+
+    // 顯示卡片
+    function showCard() {
+      card.classList.remove("flipped");
+      const entry = vocab[currentIndex];
+      frontText.textContent = entry.word;       // 希臘文
+      backText.textContent = entry.translation; // 英文翻譯
+    }
+
+    // 下一張卡片
+    document.getElementById("next-btn").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % vocab.length;
+      showCard();
+    });
+
+    // 點卡片翻轉
+    card.addEventListener("click", () => {
+      card.classList.toggle("flipped");
+    });
+  </script>
+</body>
+</html>
