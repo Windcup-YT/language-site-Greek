@@ -178,12 +178,16 @@
     }
 
     function speak(text) {
-      speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "el-GR";
-      utterance.rate = 1.0;
-      speechSynthesis.speak(utterance);
-    }
+  speechSynthesis.cancel();
+  const voices = speechSynthesis.getVoices();
+  // 找到 Microsoft Stefanos 這個聲音
+  const stefanos = voices.find(v => v.name === "Microsoft Stefanos - Greek (Greece)") || voices[0];
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.voice = stefanos;
+  utterance.lang = "el-GR";
+  utterance.rate = 1.0;
+  speechSynthesis.speak(utterance);
+}
 
     function updateProgress() {
       const bar = document.getElementById("progress-bar");
