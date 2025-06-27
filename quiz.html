@@ -75,7 +75,8 @@
   </div>
 
   <br>
-  <a href="index.html">← Back to Lobby</a>
+  <a href="category.html">← Back to Categories</a> |
+  <a href="index.html">🏠 Back to Lobby</a>
 
   <script>
     let vocab = [];
@@ -84,13 +85,27 @@
     let currentQuestion = null;
     let isWaiting = false;
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedCategory = urlParams.get("category");
+
     fetch("vocab.json")
       .then(res => {
         if (!res.ok) throw new Error("Failed to load.");
         return res.json();
       })
       .then(data => {
-        vocab = data;
+        // 分類篩選
+        if (selectedCategory) {
+          vocab = data.filter(entry => entry.category === selectedCategory);
+        } else {
+          vocab = data;
+        }
+
+        if (vocab.length === 0) {
+          document.getElementById("question").textContent = "No words found for this category 🥲";
+          return;
+        }
+
         resetQuestionPool();
         nextQuestion();
       })
@@ -185,25 +200,6 @@
         [array[i], array[j]] = [array[j], array[i]];
       }
     }
-
-    const urlParams = new URLSearchParams(window.location.search);
-const selectedCategory = urlParams.get("category");
-
-fetch("vocab.json")
-  .then(res => {
-    if (!res.ok) throw new Error("Failed to load.");
-    return res.json();
-  })
-  .then(data => {
-    if (selectedCategory) {
-      vocab = data.filter(entry => entry.category === selectedCategory);
-    } else {
-      vocab = data;
-    }
-    resetQuestionPool();
-    nextQuestion();
-  })
-  
   </script>
 </body>
 </html>
