@@ -45,10 +45,7 @@
   { "word": "θέλω", "translation": "want", "category": "verb" },
   { "word": "φοράω", "translation": "wear", "category": "verb" },
   { "word": "δουλεύω", "translation": "work", "category": "verb" },
-  { "word": "γράφω", "translation": "write", "category": "verb" }
-]
-
-[
+  { "word": "γράφω", "translation": "write", "category": "verb" },
   { "word": "Α", "translation": "Άλφα", "category": "greek-letter" },
   { "word": "Β", "translation": "Βήτα", "category": "greek-letter" },
   { "word": "Γ", "translation": "Γάμμα", "category": "greek-letter" },
