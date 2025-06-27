@@ -33,7 +33,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
     }
 
@@ -90,32 +90,55 @@
   <script>
     let isUpper = false;
 
-    const lowerKeys = [
-      "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ",
-      "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "σ", "ς", "τ",
-      "υ", "φ", "χ", "ψ", "ω",
-      "ά", "έ", "ή", "ί", "ό", "ύ", "ώ",
-      "ϊ", "ϋ", "ΐ", "ΰ"
-    ];
-
-    const upperKeys = [
-      "Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ",
-      "Λ", "Μ", "Ν", "Ξ", "Ο", "Π", "Ρ", "Σ", "Σ", "Τ",
-      "Υ", "Φ", "Χ", "Ψ", "Ω",
-      "Ά", "Έ", "Ή", "Ί", "Ό", "Ύ", "Ώ",
-      "Ϊ", "Ϋ", "Ϊ́", "Ϋ́"
+    const keyMap = [
+      { label: "A", lower: "α", upper: "Α" },
+      { label: "B", lower: "β", upper: "Β" },
+      { label: "C", lower: "ψ", upper: "Ψ" },
+      { label: "D", lower: "δ", upper: "Δ" },
+      { label: "E", lower: "ε", upper: "Ε" },
+      { label: "F", lower: "φ", upper: "Φ" },
+      { label: "G", lower: "γ", upper: "Γ" },
+      { label: "H", lower: "η", upper: "Η" },
+      { label: "I", lower: "ι", upper: "Ι" },
+      { label: "J", lower: "ξ", upper: "Ξ" },
+      { label: "K", lower: "κ", upper: "Κ" },
+      { label: "L", lower: "λ", upper: "Λ" },
+      { label: "M", lower: "μ", upper: "Μ" },
+      { label: "N", lower: "ν", upper: "Ν" },
+      { label: "O", lower: "ο", upper: "Ο" },
+      { label: "P", lower: "π", upper: "Π" },
+      { label: "Q", lower: "ς", upper: "Σ" }, // ς 不是標準但常這樣設
+      { label: "R", lower: "ρ", upper: "Ρ" },
+      { label: "S", lower: "σ", upper: "Σ" },
+      { label: "T", lower: "τ", upper: "Τ" },
+      { label: "U", lower: "θ", upper: "Θ" },
+      { label: "V", lower: "ω", upper: "Ω" },
+      { label: "W", lower: "ς", upper: "Σ" },
+      { label: "X", lower: "χ", upper: "Χ" },
+      { label: "Y", lower: "υ", upper: "Υ" },
+      { label: "Z", lower: "ζ", upper: "Ζ" },
+      { label: "ά", lower: "ά", upper: "Ά" },
+      { label: "έ", lower: "έ", upper: "Έ" },
+      { label: "ή", lower: "ή", upper: "Ή" },
+      { label: "ί", lower: "ί", upper: "Ί" },
+      { label: "ό", lower: "ό", upper: "Ό" },
+      { label: "ύ", lower: "ύ", upper: "Ύ" },
+      { label: "ώ", lower: "ώ", upper: "Ώ" },
+      { label: "ϊ", lower: "ϊ", upper: "Ϊ" },
+      { label: "ϋ", lower: "ϋ", upper: "Ϋ" },
+      { label: "ΐ", lower: "ΐ", upper: "Ϊ́" },
+      { label: "ΰ", lower: "ΰ", upper: "Ϋ́" }
     ];
 
     function renderKeyboard() {
-      const keys = isUpper ? upperKeys : lowerKeys;
       const container = document.getElementById("keyboard");
       container.innerHTML = "";
-      keys.forEach(k => {
+      keyMap.forEach(k => {
         const btn = document.createElement("button");
         btn.className = "key";
-        btn.textContent = k;
+        btn.textContent = isUpper ? k.upper : k.lower;
         btn.onclick = () => {
-          document.getElementById("output").value += k;
+          document.getElementById("output").value += isUpper ? k.upper : k.lower;
         };
         container.appendChild(btn);
       });
