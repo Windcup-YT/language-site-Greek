@@ -133,7 +133,8 @@
 
       if (currentIndex >= questionPool.length) {
         if (isPracticeTest) {
-          alert(`✅ Practice Test Finished!\nScore: ${score} / ${questionPool.length}`);
+          const percent = Math.round((score / questionPool.length) * 100);
+          alert(`✅ Practice Test Finished!\nScore: ${percent}% (${score} / ${questionPool.length})`);
           window.location.href = "quiz-category.html";
         } else {
           alert("You've finished all questions! Restarting.");
