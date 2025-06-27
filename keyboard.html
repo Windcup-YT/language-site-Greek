@@ -2,44 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
-  <title>🔤 Greek Virtual Keyboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greek Virtual Keyboard</title>
   <style>
     body {
       background-color: #111;
       color: #fff;
-      font-family: sans-serif;
-      padding: 30px;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
+      padding: 20px;
     }
 
-    input[type="text"] {
-      padding: 10px;
-      width: 80%;
-      max-width: 400px;
-      font-size: 20px;
+    #output {
+      width: 90%;
+      max-width: 500px;
+      padding: 12px;
+      font-size: 24px;
+      margin: 20px auto;
       border-radius: 8px;
       border: none;
       background-color: #222;
       color: white;
-      margin-bottom: 20px;
     }
 
     .keyboard {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
       max-width: 600px;
       margin: 0 auto;
     }
 
     .key {
+      margin: 5px;
+      padding: 14px 18px;
+      font-size: 22px;
       background-color: #333;
-      color: white;
-      padding: 10px 14px;
-      font-size: 20px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -50,58 +48,91 @@
       background-color: #555;
     }
 
-    .copy-btn {
-      margin-top: 15px;
-      font-size: 16px;
-      padding: 6px 12px;
-      background-color: #444;
-      border: none;
+    .controls {
+      margin: 20px;
+    }
+
+    button.copy-btn {
+      padding: 10px 20px;
+      font-size: 18px;
       border-radius: 6px;
+      border: none;
+      background-color: #5a9;
+      color: #000;
       cursor: pointer;
     }
 
-    .copy-btn:hover {
-      background-color: #666;
+    .toggle-btn {
+      background-color: #444;
+      color: white;
+      margin: 5px;
     }
   </style>
 </head>
 <body>
-  <h1>🔤 Greek Keyboard</h1>
-  <input type="text" id="inputBox" placeholder="Type here...">
-  
+  <h1>🔤 Greek Virtual Keyboard</h1>
+  <textarea id="output" rows="2" readonly></textarea>
+
+  <div class="controls">
+    <button class="copy-btn" onclick="copyText()">📋 Copy</button>
+    <button class="key toggle-btn" onclick="toggleCase()">Caps Lock</button>
+  </div>
+
   <div class="keyboard" id="keyboard"></div>
 
-  <button class="copy-btn" onclick="copyText()">📋 Copy</button>
+  <a href="index.html" style="display:block; margin-top:30px; color:#88f;">← Back to Lobby</a>
+
+    <br><br>
+  <a href="index.html" style="color:#88f;">← Back to Lobby</a>
 
   <script>
-    const greekLetters = [
-      'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
-      'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π',
-      'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
-      'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ',
-      'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
-      'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω',
-      'ά', 'έ', 'ί', 'ϊ', 'ό', 'ύ', 'ή', 'ώ'
+    let isUpper = false;
+
+    const lowerKeys = [
+      "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ",
+      "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "σ", "ς", "τ",
+      "υ", "φ", "χ", "ψ", "ω",
+      "ά", "έ", "ή", "ί", "ό", "ύ", "ώ",
+      "ϊ", "ϋ", "ΐ", "ΰ"
     ];
 
-    const keyboard = document.getElementById("keyboard");
-    const inputBox = document.getElementById("inputBox");
+    const upperKeys = [
+      "Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ",
+      "Λ", "Μ", "Ν", "Ξ", "Ο", "Π", "Ρ", "Σ", "Σ", "Τ",
+      "Υ", "Φ", "Χ", "Ψ", "Ω",
+      "Ά", "Έ", "Ή", "Ί", "Ό", "Ύ", "Ώ",
+      "Ϊ", "Ϋ", "Ϊ́", "Ϋ́"
+    ];
 
-    greekLetters.forEach(letter => {
-      const btn = document.createElement("button");
-      btn.className = "key";
-      btn.textContent = letter;
-      btn.onclick = () => {
-        inputBox.value += letter;
-      };
-      keyboard.appendChild(btn);
-    });
+    function renderKeyboard() {
+      const keys = isUpper ? upperKeys : lowerKeys;
+      const container = document.getElementById("keyboard");
+      container.innerHTML = "";
+      keys.forEach(k => {
+        const btn = document.createElement("button");
+        btn.className = "key";
+        btn.textContent = k;
+        btn.onclick = () => {
+          document.getElementById("output").value += k;
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function toggleCase() {
+      isUpper = !isUpper;
+      renderKeyboard();
+    }
 
     function copyText() {
-      inputBox.select();
+      const text = document.getElementById("output");
+      text.select();
+      text.setSelectionRange(0, 9999);
       document.execCommand("copy");
-      alert("Copied: " + inputBox.value);
+      alert("Copied to clipboard! 📋");
     }
+
+    renderKeyboard();
   </script>
 </body>
 </html>
