@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Select Quiz Category</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 40px;
+    }
+
+    .category-button {
+      display: block;
+      margin: 15px auto;
+      width: 250px;
+      background-color: #222;
+      color: #fff;
+      padding: 15px;
+      font-size: 20px;
+      border: 2px solid #555;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .category-button:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>📚 Select a Quiz Category</h1>
+
+  <!-- 👇 妳可以自由增加更多分類 -->
+  <a href="quiz.html?category=verb" class="category-button">🔤 Verbs</a>
+  <a href="quiz.html" class="category-button">📋 All Words</a>
+
+  <br><br>
+  <a href="index.html" style="color:#88f;">← Back to Lobby</a>
+</body>
+</html>
