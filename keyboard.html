@@ -24,6 +24,7 @@
       border: none;
       background-color: #222 !important;
       color: white !important;
+      -webkit-text-fill-color: white !important;
       appearance: none;
       -webkit-appearance: none;
     }
@@ -74,7 +75,7 @@
 </head>
 <body>
   <h1>🔤 Greek Virtual Keyboard</h1>
-  <textarea id="output" rows="2" readonly></textarea>
+  <textarea id="output" rows="2" readonly style="pointer-events: none;"></textarea>
 
   <div class="controls">
     <button class="copy-btn" onclick="copyText()">📋 Copy</button>
