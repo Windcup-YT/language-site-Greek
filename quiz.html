@@ -85,9 +85,11 @@
     let currentIndex = 0;
     let currentQuestion = null;
     let isWaiting = false;
+    let score = 0;
 
     const urlParams = new URLSearchParams(window.location.search);
     const selectedCategory = urlParams.get("category");
+    const isPracticeTest = urlParams.get("practiceTest") === "true";
 
     fetch("vocab.json")
       .then(res => {
@@ -95,8 +97,9 @@
         return res.json();
       })
       .then(data => {
-        // 分類篩選
-        if (selectedCategory) {
+        if (isPracticeTest) {
+          vocab = shuffle([...data]).slice(0, 50);
+        } else if (selectedCategory) {
           vocab = data.filter(entry => entry.category === selectedCategory);
         } else {
           vocab = data;
@@ -119,6 +122,7 @@
       questionPool = [...vocab];
       shuffle(questionPool);
       currentIndex = 0;
+      score = 0;
       updateProgress();
     }
 
@@ -128,8 +132,14 @@
       document.getElementById("feedback").textContent = "";
 
       if (currentIndex >= questionPool.length) {
-        alert("You've finished all questions! Restarting.");
-        resetQuestionPool();
+        if (isPracticeTest) {
+          alert(`✅ Practice Test Finished!\nScore: ${score} / ${questionPool.length}`);
+          window.location.href = "quiz-category.html";
+        } else {
+          alert("You've finished all questions! Restarting.");
+          resetQuestionPool();
+        }
+        return;
       }
 
       currentQuestion = questionPool[currentIndex];
@@ -167,6 +177,7 @@
       if (selected === currentQuestion.translation) {
         feedback.textContent = "Correct! 🎉";
         feedback.style.color = "lightgreen";
+        score++;
       } else {
         feedback.textContent = `Oops! The correct answer is: ${currentQuestion.translation}`;
         feedback.style.color = "red";
@@ -200,6 +211,7 @@
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
       }
+      return array;
     }
   </script>
 </body>
