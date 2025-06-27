@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔤 Greek Virtual Keyboard</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 30px;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      font-size: 20px;
+      border-radius: 8px;
+      border: none;
+      background-color: #222;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .keyboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .key {
+      background-color: #333;
+      color: white;
+      padding: 10px 14px;
+      font-size: 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .key:hover {
+      background-color: #555;
+    }
+
+    .copy-btn {
+      margin-top: 15px;
+      font-size: 16px;
+      padding: 6px 12px;
+      background-color: #444;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔤 Greek Keyboard</h1>
+  <input type="text" id="inputBox" placeholder="Type here...">
+  
+  <div class="keyboard" id="keyboard"></div>
+
+  <button class="copy-btn" onclick="copyText()">📋 Copy</button>
+
+  <script>
+    const greekLetters = [
+      'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
+      'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π',
+      'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
+      'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ',
+      'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
+      'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω',
+      'ά', 'έ', 'ί', 'ϊ', 'ό', 'ύ', 'ή', 'ώ'
+    ];
+
+    const keyboard = document.getElementById("keyboard");
+    const inputBox = document.getElementById("inputBox");
+
+    greekLetters.forEach(letter => {
+      const btn = document.createElement("button");
+      btn.className = "key";
+      btn.textContent = letter;
+      btn.onclick = () => {
+        inputBox.value += letter;
+      };
+      keyboard.appendChild(btn);
+    });
+
+    function copyText() {
+      inputBox.select();
+      document.execCommand("copy");
+      alert("Copied: " + inputBox.value);
+    }
+  </script>
+</body>
+</html>
