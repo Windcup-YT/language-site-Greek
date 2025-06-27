@@ -1,102 +1,84 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Word List</title>
-  <style>
+<style>
+  body {
+    background-color: #111;
+    color: white;
+    font-family: sans-serif;
+    padding: 20px;
+    margin: 0;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.8rem;
+  }
+
+  input[type="text"] {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 10px;
+    width: 90%;
+    max-width: 400px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #222;
+    color: white;
+    box-sizing: border-box;
+  }
+
+  .word-list {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+
+  .word-item {
+    background-color: #222;
+    margin: 8px 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+
+  .word-item:hover {
+    background-color: #333;
+  }
+
+  a {
+    color: #88f;
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1rem;
+  }
+
+  /* 手機專用微調 */
+  @media (max-width: 480px) {
     body {
-      background-color: #111;
-      color: white;
-      font-family: sans-serif;
-      padding: 20px;
+      padding: 15px 10px;
     }
 
     h1 {
-      text-align: center;
+      font-size: 1.5rem;
     }
 
     input[type="text"] {
-      display: block;
-      margin: 0 auto 20px;
-      padding: 10px;
-      width: 80%;
-      max-width: 400px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      background-color: #222;
-      color: white;
-    }
-
-    .word-list {
-      max-width: 600px;
-      margin: 0 auto;
+      width: 95%;
+      font-size: 0.9rem;
+      padding: 8px;
     }
 
     .word-item {
-      background-color: #222;
-      margin: 10px 0;
-      padding: 12px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .word-item:hover {
-      background-color: #333;
+      font-size: 0.9rem;
+      padding: 10px 12px;
     }
 
     a {
-      color: #88f;
-      display: block;
-      text-align: center;
-      margin-top: 30px;
+      font-size: 0.9rem;
     }
-  </style>
-</head>
-<body>
-  <h1>📚 Vocabulary List</h1>
-  <input type="text" id="search" placeholder="Search Greek or English...">
-  <div class="word-list" id="word-list">Loading...</div>
-  <a href="index.html">← Back to Lobby</a>
-
-  <script>
-    let vocab = [];
-
-    fetch("vocab.json")
-      .then(res => res.json())
-      .then(data => {
-        vocab = data;
-        displayWords(data);
-      })
-      .catch(() => {
-        document.getElementById("word-list").textContent = "Failed to load 🥲";
-      });
-
-    function displayWords(list) {
-      const container = document.getElementById("word-list");
-      container.innerHTML = "";
-      list.forEach((entry, index) => {
-        const item = document.createElement("div");
-        item.className = "word-item";
-        item.textContent = entry.word + " - " + entry.translation;
-        item.addEventListener("click", () => {
-          window.location.href = `card.html?index=${index}`;
-        });
-        container.appendChild(item);
-      });
-    }
-
-    document.getElementById("search").addEventListener("input", (e) => {
-      const query = e.target.value.toLowerCase();
-      const filtered = vocab.filter(entry =>
-        entry.word.toLowerCase().includes(query) ||
-        entry.translation.toLowerCase().includes(query)
-      );
-      displayWords(filtered);
-    });
-  </script>
-</body>
-</html>
+  }
+</style>
