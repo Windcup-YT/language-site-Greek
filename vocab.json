@@ -80,5 +80,15 @@
   { "word": "επτά", "translation": "7", "category": "number0to10" },
   { "word": "οκτώ", "translation": "8", "category": "number0to10" },
   { "word": "εννέα", "translation": "9", "category": "number0to10" },
-  { "word": "δέκα", "translation": "10", "category": "number0to10" }
+  { "word": "δέκα", "translation": "10", "category": "number0to10" },
+  { "word": "Chinese", "translation": "κινέζικα", "category": "language" },
+  { "word": "Arabic", "translation": "αραβικός", "category": "language" },
+  { "word": "English", "translation": "αγγλικά", "category": "language" },
+  { "word": "German", "translation": "γερμανός", "category": "language" },
+  { "word": "Greek", "translation": "ελληνικά", "category": "language" },
+  { "word": "Taiwanese", "translation": "ταϊβανέζικα", "category": "language" },
+  { "word": "Spanish", "translation": "ισπανικά", "category": "language" },
+  { "word": "Hindi", "translation": "χίντι", "category": "language" },
+  { "word": "Japanese", "translation": "ιαπωνικά", "category": "language" },
+  { "word": "French", "translation": "γαλλικά", "category": "language" }
 ]
