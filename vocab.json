@@ -69,5 +69,16 @@
   { "word": "Φ", "translation": "Φι", "category": "greek-letter" },
   { "word": "Χ", "translation": "Χι", "category": "greek-letter" },
   { "word": "Ψ", "translation": "Ψι", "category": "greek-letter" },
-  { "word": "Ω", "translation": "Ωμέγα", "category": "greek-letter" }
+  { "word": "Ω", "translation": "Ωμέγα", "category": "greek-letter" },
+  { "word": "μηδέν", "translation": "0", "category": "number0to10" },
+  { "word": "ένα", "translation": "1", "category": "number0to10" },
+  { "word": "δύο", "translation": "2", "category": "number0to10" },
+  { "word": "τρία", "translation": "3", "category": "number0to10" },
+  { "word": "τέσσερα", "translation": "4", "category": "number0to10" },
+  { "word": "πέντε", "translation": "5", "category": "number0to10" },
+  { "word": "έξι", "translation": "6", "category": "number0to10" },
+  { "word": "επτά", "translation": "7", "category": "number0to10" },
+  { "word": "οκτώ", "translation": "8", "category": "number0to10" },
+  { "word": "εννέα", "translation": "9", "category": "number0to10" },
+  { "word": "δέκα", "translation": "10", "category": "number0to10" }
 ]
