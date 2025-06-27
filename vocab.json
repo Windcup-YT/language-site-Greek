@@ -47,3 +47,30 @@
   { "word": "δουλεύω", "translation": "work", "category": "verb" },
   { "word": "γράφω", "translation": "write", "category": "verb" }
 ]
+
+[
+  { "word": "Α", "translation": "Άλφα", "category": "greek-letter" },
+  { "word": "Β", "translation": "Βήτα", "category": "greek-letter" },
+  { "word": "Γ", "translation": "Γάμμα", "category": "greek-letter" },
+  { "word": "Δ", "translation": "Δέλτα", "category": "greek-letter" },
+  { "word": "Ε", "translation": "Έψιλον", "category": "greek-letter" },
+  { "word": "Ζ", "translation": "Ζήτα", "category": "greek-letter" },
+  { "word": "Η", "translation": "Ήτα", "category": "greek-letter" },
+  { "word": "Θ", "translation": "Θήτα", "category": "greek-letter" },
+  { "word": "Ι", "translation": "Ιώτα", "category": "greek-letter" },
+  { "word": "Κ", "translation": "Κάππα", "category": "greek-letter" },
+  { "word": "Λ", "translation": "Λάμβδα", "category": "greek-letter" },
+  { "word": "Μ", "translation": "Μυ", "category": "greek-letter" },
+  { "word": "Ν", "translation": "Νυ", "category": "greek-letter" },
+  { "word": "Ξ", "translation": "Ξι", "category": "greek-letter" },
+  { "word": "Ο", "translation": "Όμικρον", "category": "greek-letter" },
+  { "word": "Π", "translation": "Πι", "category": "greek-letter" },
+  { "word": "Ρ", "translation": "Ρο", "category": "greek-letter" },
+  { "word": "Σ", "translation": "Σίγμα", "category": "greek-letter" },
+  { "word": "Τ", "translation": "Ταυ", "category": "greek-letter" },
+  { "word": "Υ", "translation": "Ύψιλον", "category": "greek-letter" },
+  { "word": "Φ", "translation": "Φι", "category": "greek-letter" },
+  { "word": "Χ", "translation": "Χι", "category": "greek-letter" },
+  { "word": "Ψ", "translation": "Ψι", "category": "greek-letter" },
+  { "word": "Ω", "translation": "Ωμέγα", "category": "greek-letter" }
+]
